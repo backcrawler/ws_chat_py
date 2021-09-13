@@ -1,9 +1,9 @@
 from fastapi import Request, APIRouter
 
 
-router = APIRouter()
+root_router = APIRouter()
 
 
-@router.get("/")
+@root_router.get("/")
 async def root_handler():
     return {"message": "Hello World"}
