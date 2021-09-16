@@ -1,0 +1,5 @@
+fastapi
+websockets
+jinja2
+aiofiles
+uvicorn

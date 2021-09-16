@@ -18,14 +18,16 @@ async def root_handler(request: Request):
 
 
 @root_router.get("/init")
-async def init_handler(response: Response, chat_auth_token: Optional[str] = Cookie(...)):
-    content = {'result': 'ok'}
+async def init_handler():
+    content = {'result': 'ok1'}
     response = JSONResponse(content=content)
+    response.headers["X-Cat-Dog"] = "alone in the world"
     response.set_cookie(key='chat_auth_token', value=uuid4().hex, httponly=False)
     return response
 
 
 @root_router.get("/test")
-async def init_handler(response: Response, request: Request, chat_auth_token: Optional[str] = Cookie(...)):
-    print(f'COOKIE: {request.cookies}')
-    return {'result': chat_auth_token}
+async def test_handler(response: Response, request: Request):
+    print(f'COOKIES: {request.cookies}')
+    print(f'HEADERS: {request.headers}')
+    return {'result': 'ok'}
