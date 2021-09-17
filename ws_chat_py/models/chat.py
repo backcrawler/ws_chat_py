@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Optional
 from uuid import uuid4
 
 from .base import BaseModel
@@ -15,13 +15,12 @@ class Chat(BaseModel):
         CLOSED = 'closed'
         DELETED = 'deleted'
 
-    def __init__(self, state: str = None, chatters: List[Person] = None):
+    def __init__(self, chatters: List[Person] = None):
         self.id = uuid4().hex
         self.chatters = chatters or []
-        self.state = state or self.State.PENDING
+        self.state = self.State.PENDING
         self.created_ts = time.time()
         self.modified_ts = self.created_ts
         self.history_records = []
         self.messages = []
         self.engine = None
-

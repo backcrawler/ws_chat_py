@@ -1,17 +1,22 @@
 import time
 from uuid import uuid4
+from typing import Optional
 
 from .base import BaseModel
 
 
 class Person(BaseModel):
 
-    def __init__(self, name: str, chat: 'Chat' = None, fields: dict = None):
-        self.id = uuid4().hex
+    class Status:
+        FREE = 'free'
+        IN_CHAT = 'in_chat'
+        UNREACHABLE = 'unreachable'
+
+    def __init__(self, token: str, name: str, chat: Optional['Chat'] = None):
+        self.id = token
         self.name = name
         self.chat = chat
+        self.status = self.Status.FREE
         self.created_ts = time.time()
         self.modified_ts = self.created_ts
-        self.fields = fields or {}
         self.engine = None
-

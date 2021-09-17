@@ -11,8 +11,8 @@ class PersonEngine:
         person.engine = self
 
     @classmethod
-    def create_person(cls, name: str) -> Person:
-        person = Person(name)
+    def create_person(cls, token: str, name: str, chat=None) -> Person:
+        person = Person(token, name, chat)
         engine = cls(person)
         cls.manager.add_person(person)
         return person
