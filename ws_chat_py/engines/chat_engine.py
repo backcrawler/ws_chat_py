@@ -1,6 +1,8 @@
-from ws_chat_py.models.chat import Chat
+from typing import Optional
 
-from ws_chat_py.managers.chat_manager import chat_manager
+from ws_chat_py.models import Chat, Message
+from ws_chat_py.managers import chat_manager
+from ws_chat_py.schemas.request_schemas import ActionCommand
 
 
 class ChatEngine:
@@ -18,7 +20,18 @@ class ChatEngine:
         cls.manager.add_chat(chat)
         return chat
 
-    def process_action(self, action: str, **params) -> None:  # todo: state-machine
+    def create_basic_message(self, text: str, ch_id: str, author_id: Optional[str] = None) -> Message:
+        chat = self.manager.get_chat_by_id(ch_id)
+        message = Message.create(
+            text=text,
+            chat=chat,
+            kind=Message.Kind.BASIC,
+            author_id=author_id
+        )
+        return message
+
+    def process_action(self, action_cmd: ActionCommand, **params) -> None:  # todo: state-machine
+        action = action_cmd.action
         if self.chat.state == self.chat.State.PENDING:
             if action == 'start_chat':
                 self.chat.state = self.chat.State.CHATTING
@@ -40,8 +53,14 @@ class ChatEngine:
         elif self.chat.state == self.chat.State.CLOSED:
             ...
 
-    def send_info_msg_to_chatters(self, msg: str) -> None:
-        ...
+    def send_info_msg_to_chatters(self, msg: str) -> Message:
+        message = Message.create(
+            text=msg,
+            chat=self.chat,
+            kind=Message.Kind.INFO,
+            author_id=None
+        )
+        return message
 
     def check_auth_for_members(self, token: str) -> bool:
         for member in self.chat.chatters:

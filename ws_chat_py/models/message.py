@@ -22,5 +22,7 @@ class Message(BaseModel):
         # self.read = False
 
     @classmethod
-    def create(cls):
-        ...
+    def create(cls, text: str, chat: 'Chat', kind: str, author_id: Optional[str] = None):
+        msg = cls(text, chat, kind, author_id)
+        chat.add_message(msg)
+        return msg

@@ -22,5 +22,8 @@ class Chat(BaseModel):
         self.created_ts = time.time()
         self.modified_ts = self.created_ts
         self.history_records = []
-        self.messages = []
+        self.messages: List['Message'] = []
         self.engine = None
+
+    def add_message(self, msg: 'Message') -> None:
+        self.messages.append(msg)
