@@ -26,3 +26,18 @@ class Message(BaseModel):
         msg = cls(text, chat, kind, author_id)
         chat.add_message(msg)
         return msg
+
+    def to_dict(self, mode='response') -> dict:
+        if mode in ('response', 'db'):
+            result = {
+                'id': self.id,
+                'text': self.text,
+                'createdTs': self.created_ts,
+                'modifiedTs': self.modified_ts,
+                'chatId': self.chat.id,
+                'kind': self.kind,
+            }
+        else:
+            raise ValueError('Incorrect mode given')
+
+        return result

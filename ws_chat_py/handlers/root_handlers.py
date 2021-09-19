@@ -42,7 +42,7 @@ async def start_chat_handler(request: Request):
         raise HTTPException(status_code=401, detail='unauthorized')
 
     await PersonEngine.set_new_chat_for_person(cookie)
-    return ...
+    return JSONResponse(content={'result': 'ok'})
 
 
 @root_router.get('/delta', response_model=DeltaResponse)
@@ -51,7 +51,7 @@ async def delta_handler(ch_id: str, request: Request):
     if not authorized:
         raise HTTPException(status_code=401, detail='unauthorized')
 
-    deltas = await delta_manager.get_deltas_for_chat(ch_id)
+    deltas = await delta_manager.get_deltas_for_person(ch_id)
     if not deltas:
         return JSONResponse({'result': 'reinit-required'})
 

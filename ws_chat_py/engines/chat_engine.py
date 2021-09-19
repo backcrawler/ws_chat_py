@@ -1,8 +1,9 @@
-from typing import Optional
+from typing import Optional, List
 
 from ws_chat_py.models import Chat, Message
-from ws_chat_py.managers import chat_manager
+from ws_chat_py.managers import chat_manager, delta_manager
 from ws_chat_py.schemas.request_schemas import ActionCommand
+from ws_chat_py.schemas.delta import Delta
 
 
 class ChatEngine:
@@ -14,10 +15,13 @@ class ChatEngine:
         chat.engine = self
 
     @classmethod
-    def create_chat(cls, chatters) -> Chat:
+    def create_chat(cls, chatters: List['Person']) -> Chat:
         chat = Chat(chatters=chatters)
         engine = cls(chat)
         cls.manager.add_chat(chat)
+        delta = Delta(name='CHAT', ch_id=chat.id, type='add', data=chat.to_dict())
+        for person in chatters:
+            delta_manager.add_delta(delta, person.id)  # todo: revise with listener
         return chat
 
     def create_basic_message(self, text: str, ch_id: str, author_id: Optional[str] = None) -> Message:

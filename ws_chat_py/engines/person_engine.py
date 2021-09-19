@@ -2,6 +2,7 @@ import asyncio
 
 from ws_chat_py.models.person import Person
 from ws_chat_py.managers.person_manager import person_manager
+from ..engines.chat_engine import ChatEngine
 
 
 class PersonEngine:
@@ -20,6 +21,8 @@ class PersonEngine:
         return person
 
     @classmethod
-    async def set_new_chat_for_person(cls, token: str):
-        person = await cls.manager.get_any_free_person(token)
-
+    async def set_new_chat_for_person(cls, token: str) -> 'Chat':
+        person_b = await cls.manager.get_any_free_person(token)
+        person_a = cls.manager.get_person_by_id(token)
+        new_chat = ChatEngine.create_chat([person_a, person_b])
+        return new_chat
