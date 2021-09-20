@@ -16,6 +16,10 @@ class DeltaManager(metaclass=Singleton):
     def add_delta(self, delta: dict, p_id: str) -> None:
         self.__person_id_to_deltas[p_id].append(delta)
 
+    def add_delta_for_chat(self, delta: dict, chat: 'Chat') -> None:
+        for person in chat.chatters:
+            self.__person_id_to_deltas[person.id].append(delta)
+
     async def get_deltas_for_person(self, p_id: str) -> Optional[List]:  # todo: make AsyncMap
         i = 0
         while True:

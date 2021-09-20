@@ -30,9 +30,8 @@ class Chat(BaseModel):
 
     def add_message(self, msg: Message) -> None:  # todo: make listener
         self.messages.append(msg)
-        for person in self.chatters:
-            delta = Delta(name='CHAT_MESSAGE', ch_id=self.id, type='add', data=msg.to_dict())
-            delta_manager.add_delta(delta, person.id)
+        delta = Delta(name='CHAT_MESSAGE', ch_id=self.id, type='add', data=msg.to_dict())
+        delta_manager.add_delta_for_chat(delta, self)
 
     def to_dict(self, mode='response') -> dict:
         if mode == 'response':

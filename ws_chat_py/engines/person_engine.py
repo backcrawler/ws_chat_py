@@ -24,5 +24,8 @@ class PersonEngine:
     async def set_new_chat_for_person(cls, token: str) -> 'Chat':
         person_b = await cls.manager.get_any_free_person(token)
         person_a = cls.manager.get_person_by_id(token)
+        if not person_b or not person_a:
+            return
+
         new_chat = ChatEngine.create_chat([person_a, person_b])
         return new_chat
