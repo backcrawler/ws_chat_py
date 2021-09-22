@@ -3,6 +3,7 @@ from uuid import uuid4
 from typing import Optional
 
 from .base import BaseModel
+from .interface import IChat
 from ..schemas.delta import Delta
 
 
@@ -13,7 +14,7 @@ class Person(BaseModel):
         IN_CHAT = 'in_chat'
         UNREACHABLE = 'unreachable'
 
-    def __init__(self, token: str, name: Optional[str] = None, chat: Optional['Chat'] = None):
+    def __init__(self, token: str, name: Optional[str] = None, chat: Optional[IChat] = None):
         self.id = token
         self._name = name
         self.chat = chat

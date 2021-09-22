@@ -3,6 +3,7 @@ from uuid import uuid4
 from typing import Optional
 
 from .base import BaseModel
+from .interface import IChat
 
 
 class Message(BaseModel):
@@ -11,7 +12,7 @@ class Message(BaseModel):
         BASIC = 'basic'
         INFO = 'info'
 
-    def __init__(self, text: str, chat: 'Chat', kind: str, author_id: Optional[str] = None):
+    def __init__(self, text: str, chat: IChat, kind: str, author_id: Optional[str] = None):
         self.id = uuid4().hex
         self.text = text
         self.chat = chat
@@ -22,7 +23,7 @@ class Message(BaseModel):
         # self.read = False
 
     @classmethod
-    def create(cls, text: str, chat: 'Chat', kind: str, author_id: Optional[str] = None):
+    def create(cls, text: str, chat: IChat, kind: str, author_id: Optional[str] = None):
         msg = cls(text, chat, kind, author_id)
         chat.add_message(msg)
         return msg
