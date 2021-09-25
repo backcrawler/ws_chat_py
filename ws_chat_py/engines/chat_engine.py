@@ -6,16 +6,18 @@ from ws_chat_py.managers import chat_manager, delta_manager
 from ws_chat_py.schemas.request_schemas import ActionCommand
 from ws_chat_py.schemas.delta import Delta
 
+from ..models.interface import IChat, IPerson
+
 
 class ChatEngine:
     manager = chat_manager
 
-    def __init__(self, chat: Chat):
+    def __init__(self, chat: IChat):
         self.chat = chat
         chat.engine = self
 
     @classmethod
-    def create_chat(cls, chatters: List['Person']) -> Chat:
+    def create_chat(cls, chatters: List[IPerson]) -> Chat:
         chat = Chat(chatters=chatters)
         engine = cls(chat)
         cls.manager.add_chat(chat)

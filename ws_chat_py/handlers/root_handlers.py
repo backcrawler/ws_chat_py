@@ -40,7 +40,7 @@ async def start_chat_handler(request: Request):
 
     chat = await PersonEngine.set_new_chat_for_person(cookie)  # todo: timeout
     if not chat:  # todo: revise this
-        JSONResponse(content={'result': 'chat-error'})
+        return JSONResponse(content={'result': 'chat-error'})
 
     return JSONResponse(content={'result': 'ok', 'chat': chat.to_dict()})
 

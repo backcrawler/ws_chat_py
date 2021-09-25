@@ -5,9 +5,10 @@ from typing import Optional
 from .base import BaseModel
 from .interface import IChat
 from ..schemas.delta import Delta
+from .interface import IPerson
 
 
-class Person(BaseModel):
+class Person(IPerson):
 
     class Status:
         FREE = 'free'

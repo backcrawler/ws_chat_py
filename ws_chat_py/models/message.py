@@ -2,11 +2,10 @@ import time
 from uuid import uuid4
 from typing import Optional
 
-from .base import BaseModel
-from .interface import IChat
+from .interface import IChat, IMessage
 
 
-class Message(BaseModel):
+class Message(IMessage):
 
     class Kind:
         BASIC = 'basic'

@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 
 from ws_chat_py.utils.util import Singleton
 from ws_chat_py.configs import DELTA_WAIT_TIME
+from ..models.interface import IChat
 
 
 class DeltaManager(metaclass=Singleton):
@@ -16,7 +17,7 @@ class DeltaManager(metaclass=Singleton):
     def add_delta(self, delta: dict, p_id: str) -> None:
         self.__person_id_to_deltas[p_id].append(delta)
 
-    def add_delta_for_chat(self, delta: dict, chat: 'Chat') -> None:
+    def add_delta_for_chat(self, delta: dict, chat: IChat) -> None:
         for person in chat.chatters:
             self.__person_id_to_deltas[person.id].append(delta)
 
