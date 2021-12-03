@@ -24,10 +24,13 @@ class PersonEngine:
 
     @classmethod
     async def set_new_chat_for_person(cls, token: str) -> Optional[IChat]:
-        person_b = await cls.manager.get_any_free_person(token)
         person_a = cls.manager.get_person_by_id(token)
+        person_a.status = Person.Status.FREE
+        person_b = await cls.manager.get_any_free_person(token)
         if not person_b or not person_a:
+            print(f'NO CHAT CREATED FOR {token}')
             return
 
         new_chat = ChatEngine.create_chat([person_a, person_b])
+        print(f'NEW CHAT CREATED {new_chat.id} FOR {token}')
         return new_chat

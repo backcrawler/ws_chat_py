@@ -21,6 +21,9 @@ class PersonManager(metaclass=Singleton):
         if p.status == Person.Status.FREE:
             self.add_to_free_persons(p)
 
+    def has_person(self, p_id: str) -> bool:
+        return p_id in self.__id_to_person
+
     def add_to_free_persons(self, p: IPerson) -> None:
         self.__free_persons.add(p.id)
 
@@ -35,22 +38,22 @@ class PersonManager(metaclass=Singleton):
         except KeyError:
             pass
 
-    def has_person(self, p: IPerson) -> bool:
-        return p.id in self.__id_to_person
-
     def get_person_by_id(self, p_id: str) -> Optional[IPerson]:
         return self.__id_to_person.get(p_id)
 
     async def get_any_free_person(self, p_id: Optional[str] = None) -> Optional[IPerson]:
         i = 0
-        extra_set = {p_id}  # deduct this of each iteration to prevent from self-fetching
+        extra_set = {p_id}  # deduct this on each iteration to prevent from self-fetching
         while True:
             if i * self.period_check >= self.max_wait_time:
                 break
 
             person_list = list(self.__free_persons - extra_set)
-            if person_list:
-                p_id_to_fetch = random.choice(person_list)
+            if not person_list:
+                break
+
+            p_id_to_fetch = random.choice(person_list)
+            if p_id_to_fetch != p_id:
                 return self.get_person_by_id(p_id_to_fetch)
 
             i += 1

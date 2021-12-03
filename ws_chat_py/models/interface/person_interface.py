@@ -12,11 +12,47 @@ class IPerson:
         ...
 
     @property
-    def status(self) -> str:
+    def id(self) -> str:
         ...
 
     @property
-    def name(self) -> str:
+    def name(self) -> Optional[str]:
+        ...
+
+    @name.setter
+    def name(self, value: Optional[str]) -> None:
+        ...
+
+    @property
+    def chat(self) -> Optional['IChat']:
+        ...
+
+    @chat.setter
+    def chat(self, value: Optional['IChat']) -> None:
+        ...
+
+    @property
+    def status(self) -> str:
+        ...
+
+    @status.setter
+    def status(self, value: str):
+        ...
+
+    @property
+    def created_ts(self) -> float:
+        ...
+
+    @property
+    def modified_ts(self) -> float:
+        ...
+
+    @modified_ts.setter
+    def modified_ts(self, value: float) -> None:
+        ...
+
+    @property
+    def client_side_id(self) -> str:
         ...
 
     def to_dict(self, mode: str = 'response') -> dict:

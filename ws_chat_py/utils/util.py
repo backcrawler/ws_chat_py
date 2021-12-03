@@ -1,3 +1,6 @@
+from functools import partial
+
+
 class Singleton(type):
 
     _instances = {}
@@ -8,3 +11,5 @@ class Singleton(type):
         return cls._instances[cls]
 
 
+async def a_partial(func, *args, **kwargs):
+    return partial(func, *args, **kwargs)

@@ -8,7 +8,7 @@ from ..managers.delta_manager import delta_manager
 from ..schemas.delta import Delta
 
 
-class Chat(IChat):
+class Chat(BaseModel, IChat):
 
     class State:
         PENDING = 'pending'
@@ -18,14 +18,66 @@ class Chat(IChat):
         DELETED = 'deleted'
 
     def __init__(self, chatters: List[IPerson] = None):
-        self.id = uuid4().hex
-        self.chatters = chatters or []
-        self.state = self.State.PENDING
-        self.created_ts = time.time()
-        self.modified_ts = self.created_ts
-        self.history_records = []  # todo: make history
-        self.messages: List[IMessage] = []
+        ts = time.time()
+        field_name_to_value = {
+            'id': uuid4().hex,
+            'chatters': chatters or [],
+            'state': self.State.PENDING,
+            'created_ts': ts,
+            'modified_ts': ts,
+            'history_records': [],  # todo: make history
+            'messages': [],
+        }
+        super().__init__(field_name_to_value)
         self.engine = None
+
+    @property
+    def id(self) -> str:
+        return self._get_field('id')
+
+    @property
+    def chatters(self) -> List['IPerson']:
+        return self._get_field('chatters')
+
+    @chatters.setter
+    def chatters(self, value: List[IPerson]) -> None:
+        self._set_field('chatters', value)
+
+    @property
+    def state(self) -> str:
+        return self._get_field('state')
+
+    @state.setter
+    def state(self, value: str) -> None:
+        self._set_field('state', value)
+
+    @property
+    def created_ts(self) -> float:
+        return self._get_field('created_ts')
+
+    @property
+    def modified_ts(self) -> float:
+        return self._get_field('modified_ts')
+
+    @modified_ts.setter
+    def modified_ts(self, value: float) -> None:
+        self._set_field('modified_ts', value)
+
+    @property
+    def history_records(self) -> list:
+        return self._get_field('history_records')
+
+    @history_records.setter
+    def history_records(self, value: list) -> None:
+        self._set_field('history_records', value)
+
+    @property
+    def messages(self) -> List[IMessage]:
+        return self._get_field('messages')
+
+    @messages.setter
+    def messages(self, value: List[IMessage]) -> None:
+        self._set_field('messages', value)
 
     def add_message(self, msg: IMessage) -> None:  # todo: make listener
         self.messages.append(msg)

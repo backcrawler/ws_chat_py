@@ -1,3 +1,5 @@
+- Async dict
 - DI for auth
 - DI for Services
 - Pytest
+- front errors (send msg before chat)

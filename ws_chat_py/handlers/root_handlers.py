@@ -38,18 +38,20 @@ async def start_chat_handler(request: Request):
     if not cookie:
         raise HTTPException(status_code=401, detail='unauthorized')
 
-    chat = await PersonEngine.set_new_chat_for_person(cookie)  # todo: timeout
-    if not chat:  # todo: revise this
-        return JSONResponse(content={'result': 'chat-error'})
+    if not person_manager.has_person(cookie):
+        raise HTTPException(status_code=401, detail='unauthorized')
 
-    return JSONResponse(content={'result': 'ok', 'chat': chat.to_dict()})
+    asyncio.create_task(PersonEngine.set_new_chat_for_person(cookie))
+
+    return JSONResponse(content={'result': 'ok'})
 
 
 @root_router.get('/delta', response_model=DeltaResponse)
-async def delta_handler(ch_id: str, request: Request):
-    authorized = check_auth_for_chat(ch_id, request.cookies.get('chat_auth_token'))
-    if not authorized:
-        raise HTTPException(status_code=401, detail='unauthorized')
+async def delta_handler(request: Request):
+    # TODO: remake auth
+    # authorized = check_auth_for_chat(ch_id, request.cookies.get('chat_auth_token'))
+    # if not authorized:
+    #     raise HTTPException(status_code=401, detail='unauthorized')
 
     deltas = await delta_manager.get_deltas_for_person(request.cookies.get('chat_auth_token'))
     if not deltas:

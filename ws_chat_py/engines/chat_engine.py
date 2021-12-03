@@ -24,6 +24,7 @@ class ChatEngine:
         delta = Delta(name='CHAT', ch_id=chat.id, type='add', data=chat.to_dict())
         for person in chatters:
             person.chat = chat
+            person.status = person.Status.IN_CHAT
             delta_manager.add_delta(delta, person.id)  # todo: revise with listener
         return chat
 
